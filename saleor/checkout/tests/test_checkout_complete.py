@@ -1251,8 +1251,8 @@ def test_complete_checkout_0_total_captured_payment_creates_expected_events(
         manager=manager,
         lines=lines,
         payment_data={},
+        discounts=[],
         store_source=False,
-        discounts=None,
         user=customer_user,
         app=app,
     )
@@ -1372,8 +1372,8 @@ def test_complete_checkout_action_required_voucher_once_per_customer(
         manager=manager,
         lines=lines,
         payment_data={},
+        discounts=[],
         store_source=False,
-        discounts=None,
         user=customer_user,
         app=app,
     )
@@ -1427,8 +1427,8 @@ def test_complete_checkout_order_not_created_when_the_refund_is_ongoing(
         manager=manager,
         lines=lines,
         payment_data={},
+        discounts=[],
         store_source=False,
-        discounts=None,
         user=customer_user,
         app=None,
     )
@@ -1687,8 +1687,8 @@ def test_complete_checkout_invalid_shipping_method(
             manager=manager,
             lines=lines,
             payment_data={},
+            discounts=[],
             store_source=False,
-            discounts=None,
             user=customer_user,
             app=app,
         )
@@ -1851,7 +1851,6 @@ def test_checkout_complete_pick_payment_flow(
         lines=lines,
         payment_data={},
         store_source=False,
-        discounts=None,
         user=customer_user,
         app=None,
         site_settings=None,
