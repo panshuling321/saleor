@@ -1056,7 +1056,6 @@ def create_transaction_event_for_transaction_session(
     request_event: TransactionEvent,
     app: App,
     manager: "PluginsManager",
-    discounts: Optional[Iterable["DiscountInfo"]],
     transaction_webhook_response: Optional[Dict[str, Any]] = None,
 ):
     request_event_type = "session-request"
@@ -1407,7 +1406,6 @@ def handle_transaction_initialize_session(
         app,
         transaction_webhook_response=response_data,
         manager=manager,
-        discounts=discounts,
     )
     data_to_return = response_data.get("data") if response_data else None
     return created_event.transaction, created_event, data_to_return
@@ -1443,7 +1441,6 @@ def handle_transaction_process_session(
         app,
         transaction_webhook_response=response_data,
         manager=manager,
-        discounts=discounts,
     )
     data_to_return = response_data.get("data") if response_data else None
     return created_event, data_to_return

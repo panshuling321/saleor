@@ -1071,7 +1071,6 @@ def test_create_transaction_event_for_transaction_session_success_response(
         request_event,
         webhook_app,
         manager=plugins_manager,
-        discounts=[],
         transaction_webhook_response=response,
     )
 
@@ -1113,7 +1112,6 @@ def test_create_transaction_event_for_transaction_session_success_response_with_
         request_event,
         webhook_app,
         manager=plugins_manager,
-        discounts=[],
         transaction_webhook_response=response,
     )
 
@@ -1159,7 +1157,6 @@ def test_create_transaction_event_for_transaction_session_not_success_events(
         request_event,
         webhook_app,
         manager=plugins_manager,
-        discounts=[],
         transaction_webhook_response=response,
     )
 
@@ -1209,7 +1206,6 @@ def test_create_transaction_event_for_transaction_session_missing_psp_reference(
         request_event,
         webhook_app,
         manager=plugins_manager,
-        discounts=[],
         transaction_webhook_response=response,
     )
 
@@ -1255,7 +1251,6 @@ def test_create_transaction_event_for_transaction_session_missing_reference_with
         request_event,
         webhook_app,
         manager=plugins_manager,
-        discounts=[],
         transaction_webhook_response=response,
     )
 
