@@ -1,6 +1,6 @@
 import uuid
 from decimal import Decimal
-from typing import TYPE_CHECKING, Dict, Iterable, List, Optional, Union, cast
+from typing import TYPE_CHECKING, Dict, List, Optional, Union, cast
 
 import graphene
 from django.core.exceptions import ValidationError
@@ -100,7 +100,6 @@ from ..core.scalars import JSON, UUID, PositiveDecimal
 from ..core.types import BaseInputObjectType, BaseObjectType
 from ..core.types import common as common_types
 from ..core.utils import from_global_id_or_error
-from ..discount.dataloaders import load_discounts
 from ..meta.mutations import MetadataInput
 from ..plugins.dataloaders import get_plugin_manager_promise
 from ..utils import get_user_or_app_from_context
@@ -115,7 +114,6 @@ from .utils import check_if_requestor_has_access, metadata_contains_empty_key
 
 if TYPE_CHECKING:
     from ...account.models import User
-    from ...discount import DiscountInfo
     from ...plugins.manager import PluginsManager
 
 
@@ -1676,7 +1674,6 @@ class TransactionSessionBase(BaseMutation):
         incorrect_type_error_code: str,
         not_found_error: str,
         manager: "PluginsManager",
-        discounts: Optional[Iterable["DiscountInfo"]],
     ) -> Union[checkout_models.Checkout, order_models.Order]:
         source_object_type, source_object_id = from_global_id_or_error(
             id, raise_error=False
@@ -1703,7 +1700,6 @@ class TransactionSessionBase(BaseMutation):
             )
             if source_object:
                 lines, _ = fetch_checkout_lines(source_object)
-                discounts = discounts or []
                 checkout_info = fetch_checkout_info(source_object, lines, manager)
                 checkout_info, _ = fetch_checkout_data(checkout_info, manager, lines)
                 source_object = checkout_info.checkout
@@ -1835,14 +1831,12 @@ class PaymentGatewayInitialize(TransactionSessionBase):
 
     @classmethod
     def perform_mutation(cls, root, info, *, id, amount=None, payment_gateways=None):
-        discounts = load_discounts(info.context)
         manager = get_plugin_manager_promise(info.context).get()
         source_object = cls.clean_source_object(
             info,
             id,
             PaymentGatewayInitializeErrorCode.INVALID.value,
             PaymentGatewayInitializeErrorCode.NOT_FOUND.value,
-            discounts=discounts,
             manager=manager,
         )
         payment_gateways_data = []
@@ -1939,7 +1933,6 @@ class TransactionInitialize(TransactionSessionBase):
     def perform_mutation(
         cls, root, info, *, id, payment_gateway, amount=None, action=None
     ):
-        discounts = load_discounts(info.context)
         manager = get_plugin_manager_promise(info.context).get()
         payment_gateway_data = PaymentGatewayData(
             app_identifier=payment_gateway["id"], data=payment_gateway.get("data")
@@ -1949,7 +1942,6 @@ class TransactionInitialize(TransactionSessionBase):
             id,
             TransactionInitializeErrorCode.INVALID.value,
             TransactionInitializeErrorCode.NOT_FOUND.value,
-            discounts=discounts,
             manager=manager,
         )
         action = cls.clean_action(info, action, source_object.channel)
