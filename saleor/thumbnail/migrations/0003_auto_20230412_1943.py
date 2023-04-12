@@ -6,7 +6,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("app", "0023_populate_app_and_app_installation_uuid"),
+        ("app", "0026_auto_20230420_1544"),
         ("thumbnail", "0002_alter_thumbnail_format"),
     ]
 
